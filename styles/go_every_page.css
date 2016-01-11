@@ -284,6 +284,11 @@ input.go_test_field_rm {
 	cursor: -moz-grabbing;
 }
 
+.go_daily_info_label {
+	text-align: right;
+	font-weight: bold;
+}
+
 #go_start_info {
 	display: inline-block;
 }

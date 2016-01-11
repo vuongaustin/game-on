@@ -54,6 +54,11 @@ function go_mta_con_meta( array $meta_boxes ) {
 				'type' => 'text'
 			),
 			array(
+				'name' => 'Periodic'.go_task_opt_help( 'periodic', '', 'http://maclab.guhsd.net/go/video/quests/periodic.mp4' ),
+				'id' => "{$prefix}periodic",
+				'type' => 'go_periodic'
+			),
+			array(
 				'name' => 'Start Filter'.go_task_opt_help( 'start_filter', '', 'http://maclab.guhsd.net/go/video/quests/startFilter.mp4' ),
 				'id' => "{$prefix}start_filter",
 				'type' => 'go_start_filter'
@@ -648,7 +653,84 @@ function go_rank_list() {
 		echo "No <a href='".admin_url()."/?page=game-on-options.php' target='_blank'>".get_option( 'go_level_plural_names' )."</a> were provided.";
 	}
 }
+//////////////
 
+add_action( 'cmb_render_go_periodic', 'go_render_periodic' );
+function go_render_periodic() {
+	$custom = get_post_custom();
+	$periodic_info = ( ! empty( $custom['go_mta_periodic'][0] ) ? unserialize( $custom['go_mta_periodic'][0] ) : null );
+	?>
+    <input name='go_mta_task_periodic' type='checkbox' id='go_periodic_checkbox' <?php echo ( ! empty( $checked ) ) ? 'checked' : '' ; ?>/>
+    <select id='go_mta_periodic_dropdown' name='go_mta_periodic_dropdown' />
+            <option value="daily">Daily</option>
+            <option value="every_weeekday">Every Weekday</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+    </select>
+    <div id='go_periodic_info'>
+        <table id='go_daily_info'>
+        	<tr>
+                <td class='go_daily_info_label'><label for='go_mta_daily_dropdown'>Repeat every:</label></td>
+                <td>
+                    <select id='go_mta_daily_dropdown' name='go_mta_daily_dropdown'>
+                        <option value='1'>1</option>
+                        <option value='2'>2</option>
+                        <option value='3'>3</option>
+                        <option value='4'>4</option>
+                        <option value='5'>5</option>
+                        <option value='6'>6</option>
+                        <option value='7'>7</option>
+                        <option value='8'>8</option>
+                        <option value='9'>9</option>
+                        <option value='10'>10</option>
+                        <option value='11'>11</option>
+                        <option value='12'>12</option>
+                        <option value='13'>13</option>
+                        <option value='14'>14</option>
+                        <option value='15'>15</option>
+                        <option value='16'>16</option>
+                        <option value='17'>17</option>
+                        <option value='18'>18</option>
+                        <option value='19'>19</option>
+                        <option value='20'>20</option>
+                        <option value='21'>21</option>
+                        <option value='22'>22</option>
+                        <option value='23'>23</option>
+                        <option value='24'>24</option>
+                        <option value='25'>25</option>
+                        <option value='26'>26</option>
+                        <option value='27'>27</option>
+                        <option value='28'>28</option>
+                        <option value='29'>29</option>
+                        <option value='30'>30</option>
+                    </select> days
+                </td>
+            </tr>
+            <tr>
+                <td class='go_daily_info_label'><label for='go_mta_start_date'>Starts on:</label></td>
+                <td><input id='go_mta_start_date' type='date' name='go_mta_start_date' /></br></td>
+            </tr>
+            <tr>
+            <td class='go_daily_info_label'><label for='go_mta_end_radio'>Ends:</label></td>
+            	<td>
+                    <div id='go_mta_end_radio'>
+                        <input type="radio" name="ends" value="never">Never<br>
+                        <input type="radio" name="ends" value="occurences">After <input type='input' /> occurences<br>
+                        <input type="radio" name="ends" value="on_date">On <input type='input' /><br>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <?php
+}
+
+add_action( 'cmb_validate_go_periodic', 'go_validate_periodic' );
+function go_validate_periodic() { 
+	$checked = ( ! empty( $_POST['go_mta_task_periodic'] ) ? $_POST['go_mta_task_periodic'] : null );
+}
+
+//////////////
 add_action( 'cmb_render_go_start_filter', 'go_render_start_filter' );
 function go_render_start_filter() {
 	$custom = get_post_custom();
